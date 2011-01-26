@@ -1,0 +1,443 @@
+(deftemplate Pit (slot xpos) (slot ypos))
+(deftemplate Wumpus (slot xpos) (slot ypos) (slot isAlive (default TRUE)) )
+(deftemplate Gold (slot xpos) (slot ypos))
+(deftemplate Explorer (slot xpos) (slot ypos) (slot dir (default 0)) (slot isAlive (default TRUE)))
+
+(deftemplate Room
+    "A square in Wumpus world grid"
+    (slot xpos (type INTEGER))		; latitude
+    (slot ypos (type INTEGER))		; longitude
+    (slot visited (default FALSE))	; Has the hunter been in it?
+    (slot smell (default UNKNOWN))	; Is it smelly?
+    (slot breeze (default UNKNOWN))	; Is it breezy?
+    (slot shine (default UNKNOWN))	; Do we see something shining?
+    (slot hasWumpus (default UNKNOWN))	; Is the wumpus here?
+    (slot hasPit (default UNKNOWN))	; Is there a pit here?
+    (slot hasGold (default UNKNOWN))	; Is the gold here?
+    (slot safe (default UNKNOWN))	; Is the cave safe? no wumpus + no pit?
+)
+
+(deffacts myroom0 (Room (xpos 0) (ypos 0)))
+(deffacts myroom1 (Room (xpos 0) (ypos 1)))
+(deffacts myroom2 (Room (xpos 0) (ypos 2)))
+(deffacts myroom3 (Room (xpos 0) (ypos 3)))
+(deffacts myroom4 (Room (xpos 0) (ypos 4)))
+(deffacts myroom5 (Room (xpos 0) (ypos 5)))
+(deffacts myroom6 (Room (xpos 0) (ypos 6)))
+(deffacts myroom7 (Room (xpos 0) (ypos 7)))
+
+(deffacts myroom8 (Room (xpos 1) (ypos 0)))
+(deffacts myroom9 (Room (xpos 1) (ypos 1)))
+(deffacts myroom10 (Room (xpos 1) (ypos 2)))
+(deffacts myroom11 (Room (xpos 1) (ypos 3)))
+(deffacts myroom12 (Room (xpos 1) (ypos 4)))
+(deffacts myroom13 (Room (xpos 1) (ypos 5)))
+(deffacts myroom14 (Room (xpos 1) (ypos 6)))
+(deffacts myroom15 (Room (xpos 1) (ypos 7)))
+
+(deffacts myroom16 (Room (xpos 2) (ypos 0)))
+(deffacts myroom17 (Room (xpos 2) (ypos 1)))
+(deffacts myroom18 (Room (xpos 2) (ypos 2)))
+(deffacts myroom19 (Room (xpos 2) (ypos 3)))
+(deffacts myroom20 (Room (xpos 2) (ypos 4)))
+(deffacts myroom21 (Room (xpos 2) (ypos 5)))
+(deffacts myroom22 (Room (xpos 2) (ypos 6)))
+(deffacts myroom23 (Room (xpos 2) (ypos 7)))
+
+(deffacts myroom24 (Room (xpos 3) (ypos 0)))
+(deffacts myroom25 (Room (xpos 3) (ypos 1)))
+(deffacts myroom26 (Room (xpos 3) (ypos 2)))
+(deffacts myroom27 (Room (xpos 3) (ypos 3)))
+(deffacts myroom28 (Room (xpos 3) (ypos 4)))
+(deffacts myroom29 (Room (xpos 3) (ypos 5)))
+(deffacts myroom30 (Room (xpos 3) (ypos 6)))
+(deffacts myroom31 (Room (xpos 3) (ypos 7)))
+
+(deffacts myroom32 (Room (xpos 4) (ypos 0)))
+(deffacts myroom33 (Room (xpos 4) (ypos 1)))
+(deffacts myroom34 (Room (xpos 4) (ypos 2)))
+(deffacts myroom35 (Room (xpos 4) (ypos 3)))
+(deffacts myroom36 (Room (xpos 4) (ypos 4)))
+(deffacts myroom37 (Room (xpos 4) (ypos 5)))
+(deffacts myroom38 (Room (xpos 4) (ypos 6)))
+(deffacts myroom39 (Room (xpos 4) (ypos 7)))
+
+(deffacts myroom40 (Room (xpos 5) (ypos 0)))
+(deffacts myroom41 (Room (xpos 5) (ypos 1)))
+(deffacts myroom42 (Room (xpos 5) (ypos 2)))
+(deffacts myroom43 (Room (xpos 5) (ypos 3)))
+(deffacts myroom44 (Room (xpos 5) (ypos 4)))
+(deffacts myroom45 (Room (xpos 5) (ypos 5)))
+(deffacts myroom46 (Room (xpos 5) (ypos 6)))
+(deffacts myroom47 (Room (xpos 5) (ypos 7)))
+
+(deffacts myroom48 (Room (xpos 6) (ypos 0)))
+(deffacts myroom49 (Room (xpos 6) (ypos 1)))
+(deffacts myroom50 (Room (xpos 6) (ypos 2)))
+(deffacts myroom51 (Room (xpos 6) (ypos 3)))
+(deffacts myroom52 (Room (xpos 6) (ypos 4)))
+(deffacts myroom53 (Room (xpos 6) (ypos 5)))
+(deffacts myroom54 (Room (xpos 6) (ypos 6)))
+(deffacts myroom55 (Room (xpos 6) (ypos 7)))
+
+(deffacts myroom56 (Room (xpos 7) (ypos 0)))
+(deffacts myroom57 (Room (xpos 7) (ypos 1)))
+(deffacts myroom58 (Room (xpos 7) (ypos 2)))
+(deffacts myroom59 (Room (xpos 7) (ypos 3)))
+(deffacts myroom60 (Room (xpos 7) (ypos 4)))
+(deffacts myroom61 (Room (xpos 7) (ypos 5)))
+(deffacts myroom62 (Room (xpos 7) (ypos 6)))
+(deffacts myroom63 (Room (xpos 7) (ypos 7)))
+
+(deffunction buildworld ()
+  ;; (buildworld N M) makes cave assertions for a NxM rectangular  world.
+  ;; (printout t "Adding adj asserts for a " ?width " by " ?height "  world." crlf)
+	(bind ?x 0)
+	(while (<= ?x 7)
+		(bind ?y 0)
+		(while (<= ?y 7)
+			(if (> ?x 0) then (assert (adj ?x ?y (- ?x 1) ?y)))
+			(if (> ?y 0) then (assert (adj ?x ?y ?x (- ?y 1))))
+			(if (< ?x 7) then (assert (adj ?x ?y (+ ?x 1) ?y)))
+			(if (< ?y 7) then (assert (adj ?x ?y ?x (+ ?y 1))))
+			(bind ?y (+ 1 ?y)))
+		(bind ?x (+ ?x 1)))
+)
+
+(deffunction move (?factNumber ?newx ?newy)
+	(modify ?factNumber (xpos ?newx) (ypos ?newy))
+	(printout t "~~> new position: ["(+ 1 ?newx)"," (+ 1 ?newy)"]" crlf)
+)
+
+(deffunction turn (?factNumber ?newdirection)
+	(modify ?factNumber (dir ?newdirection))
+	(printout t "~~> new direction: "?newdirection crlf)
+)
+
+(defrule throw-arrow-v
+	(Explorer (xpos ?x) (ypos ?y))
+	(Room (xpos ?x) (hasWumpus TRUE))
+	?woompie <- (Wumpus (xpos ?x) (isAlive TRUE))
+	
+	=>
+	
+	(modify ?woompie (isAlive FALSE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - dead wumpus" crlf)
+)
+
+(defrule throw-arrow-h
+	(Explorer (xpos ?x) (ypos ?y))
+	(Room (ypos ?y) (hasWumpus TRUE))
+	?woompie <- (Wumpus (ypos ?y) (isAlive TRUE))
+	
+	=>
+	
+	(modify ?woompie (isAlive FALSE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - dead wumpus" crlf)
+)
+	
+
+(defrule bumpLeft
+	?exp <- (Explorer (xpos ?x))
+	(< ?x 0)
+	
+	=>
+	
+	(modify ?exp (xpos 0))
+	(printout t "--> bump!" crlf)
+)
+
+(defrule bumpRight
+	?exp <- (Explorer (xpos ?x))
+	(> ?x 7)
+	
+	=>
+	
+	(modify ?exp (xpos 7))
+	(printout t "--> bump!" crlf)
+)
+
+(defrule bumpUp
+	?exp <- (Explorer (ypos ?y))
+	(> ?y 7)
+	
+	=>
+	
+	(modify ?exp (ypos 7))
+	(printout t "--> bump!" crlf)
+)
+
+(defrule bumpDown
+	?exp <- (Explorer (ypos ?y))
+	(< ?y 0)
+	
+	=>
+	
+	(modify ?exp (ypos 0))
+	(printout t "--> bump!" crlf)
+)
+
+(deftemplate world)
+
+(deffacts world0 (world))
+
+(defrule make-world
+	(world)
+	=>
+	(buildworld)
+)
+
+(defrule breeze-sensed
+	"The explorer senses a breeze in the current room"
+	(Explorer (xpos ?x) (ypos ?y))
+	?cur_room <- (Room (xpos ?x) (ypos ?y) (breeze UNKNOWN))
+	(adj ?x ?y ?x2 ?y2)
+	(Pit (xpos ?x2) (ypos ?y2))
+	
+	=>
+	
+	(modify ?cur_room (breeze TRUE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - breeze" crlf)
+)
+
+(defrule no-breeze-sensed
+	"The explorer senses no breeze in the current room"
+	(declare (salience -1))	;we want it evaluated after "breeze sensed"
+	(Explorer (xpos ?x) (ypos ?y))
+	?cur_room <- (Room (xpos ?x) (ypos ?y) (breeze UNKNOWN))
+	;(adj ?x ?y ?x2 ?y2)
+ 
+	=>
+ 
+	(modify ?cur_room (breeze FALSE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - no breeze" crlf)
+)
+
+(defrule maybe-pit
+	"There may be a pit in the adjacent rooms"
+	(Room (xpos ?x) (ypos ?y) (breeze TRUE))
+	?adj_room <- (Room (xpos ?x2) (ypos ?y2) (hasPit UNKNOWN))
+	(adj ?x ?y ?x2 ?y2)
+	
+	=>
+	
+	(modify ?adj_room (hasPit MAYBE))
+	(printout t "--> Room ["(+ 1 ?x2)"," (+ 1 ?y2)"] - ?pit?" crlf)
+)
+
+(defrule no-pit
+	"There is definitely no pit in the adjacent rooms"
+	(Room (xpos ?x) (ypos ?y) (breeze FALSE))
+	?adj_room <- (Room (xpos ?x2) (ypos ?y2) (hasPit ~FALSE))
+	(adj ?x ?y ?x2 ?y2)
+	
+	=>
+	
+	(modify ?adj_room (hasPit FALSE))
+	(printout t "--> Room ["(+ 1 ?x2)"," (+ 1 ?y2)"] - no pit" crlf)
+)
+
+(defrule smell-sensed
+	"The explorer smells something in the current room"
+	(Explorer (xpos ?x) (ypos ?y))
+	?cur_room <- (Room (xpos ?x) (ypos ?y) (smell UNKNOWN))
+	(adj ?x ?y ?x2 ?y2)
+	(Wumpus (xpos ?x2) (ypos ?y2) (isAlive TRUE))
+	
+	=>
+	
+	(modify ?cur_room (smell TRUE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - smell" crlf)
+)
+
+(defrule no-smell-sensed
+	"The explorer smells nothing in the current Room"
+	(declare (salience -1))
+	(Explorer (xpos ?x) (ypos ?y))
+	?cur_room <- (Room (xpos ?x) (ypos ?y) (smell UNKNOWN))
+  
+	=>
+  
+	(modify ?cur_room (smell FALSE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - no smell" crlf)
+)
+
+(defrule maybe-wumpus-rule4
+	"The wumpus is in one of the adjacent rooms"
+	(Room (xpos ?x) (ypos ?y) (smell TRUE))
+	?adj_room <- (Room (xpos ?x2) (ypos ?y2) (hasWumpus UNKNOWN))
+	(adj ?x ?y ?x2 ?y2)
+	
+	=>
+	
+	(modify ?adj_room (hasWumpus MAYBE))
+	(printout t "--> Room ["(+ 1 ?x2)"," (+ 1 ?y2)"] - ?wumpus?" crlf)
+)
+
+(defrule no-wumpus-rule5
+	"There is definitely no wumpus in some of the Rooms"
+	(declare (salience -5))
+	(Room (xpos ?x) (ypos ?y) (hasWumpus MAYBE))
+	?other_room <- (Room (xpos ?x2) (ypos ?y2) (hasWumpus UNKNOWN))
+	
+	=>
+	
+	(modify ?other_room (hasWumpus FALSE))
+	;(printout t "--> Room ["(+ 1 ?x2)"," (+ 1 ?y2)"] - no wumpus" crlf)
+)
+
+(defrule no-wumpus-rule3
+	"There is definitely no wumpus in the adjacent Rooms"
+	(Room (xpos ?x) (ypos ?y) (smell FALSE))
+	?adj_room <- (Room (xpos ?x2) (ypos ?y2) (hasWumpus ~FALSE))
+	(adj ?x ?y ?x2 ?y2)
+	
+	=>
+	
+	(modify ?adj_room (hasWumpus FALSE))
+	(printout t "--> Room ["(+ 1 ?x2)"," (+ 1 ?y2)"] - no wumpus" crlf)
+)
+
+(defrule no-wumpus-rule6
+	(Room (xpos ?x) (ypos ?y) (smell TRUE))
+	?other_room <- (Room (xpos ?x2) (ypos ?y2) (hasWumpus MAYBE))
+	(not (adj ?x ?y ?x2 ?y2))
+	
+	=>
+	
+	(modify ?other_room (hasWumpus FALSE))
+	(printout t "--> Room ["(+ 1 ?x2)"," (+ 1 ?y2)"] - no wumpus" crlf)
+)
+
+(defrule shine-seen
+	"The explorer sees something shiny in the current room"
+	(Explorer (xpos ?x) (ypos ?y))
+	?cur_room <- (Room (xpos ?x) (ypos ?y) (shine UNKNOWN))
+	(Gold (xpos ?x) (ypos ?y))
+	
+	=>
+	
+	(modify ?cur_room (shine TRUE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - shine" crlf)
+)
+
+(defrule no-shine-seen
+	"The explorer sees nothing shiny in the current Room"
+	(Explorer (xpos ?x) (ypos ?y))
+	?cur_room <- (Room (xpos ?x) (ypos ?y) (shine UNKNOWN))
+	(not (Gold (xpos ?x) (ypos ?y)))
+  
+	=>
+  
+	(modify ?cur_room (shine FALSE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - no shine" crlf)
+)
+
+(defrule gold-here
+	"The gold is in the current room"
+	?cur_room <- (Room (xpos ?x) (ypos ?y) (shine TRUE) (hasGold ~TRUE))
+	
+	=>
+	
+	(modify ?cur_room (hasGold TRUE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - gold" crlf)
+)
+
+(defrule no-gold-here
+	"There is no gold here"
+	?cur_room <- (Room (xpos ?x) (ypos ?y) (shine FALSE) (hasGold ~FALSE))
+	
+	=>
+	
+	(modify ?cur_room (hasGold FALSE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - no gold" crlf)
+)
+
+(defrule room-is-safe-before
+	"A room is safe when no pit and no wumpus are in it!"
+	?some_room <- (Room (xpos ?x) (ypos ?y) (hasWumpus FALSE) (hasPit FALSE) (safe ~TRUE))
+	
+	=>
+	
+	(modify ?some_room (safe TRUE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - safe, no pit, no wumpus" crlf)
+)
+
+(defrule room-is-safe-before-2
+	"A room is safe when there is no pit in it and the wumpus is dead!"
+	?some_room <- (Room (xpos ?x) (ypos ?y) (hasWumpus TRUE) (hasPit FALSE) (safe ~TRUE))
+	(Wumpus (xpos ?x) (ypos ?y) (isAlive FALSE))
+	
+	=>
+	
+	(modify ?some_room (safe TRUE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - safe, no pit, dead wumpus" crlf)
+)
+
+(defrule room-is-safe-after
+	(Explorer (xpos ?x)(ypos ?y) (isAlive TRUE))
+	?cur_room <- (Room (xpos ?x) (ypos ?y) (safe UNKNOWN))
+	
+	=>
+	
+	(modify ?cur_room (safe TRUE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - @explorer, safe." crlf)
+)
+
+(defrule no-dangers-because-safe-1
+	"A safe room doesn't have any wumpus or pits!"
+	?some_room <- (Room (xpos ?x) (ypos ?y) (safe TRUE) (hasWumpus ~FALSE))
+
+	=>
+
+	(modify ?some_room (hasWumpus FALSE) (hasPit FALSE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - safe, no wumpus, no pit" crlf)
+)
+
+(defrule no-dangers-because-safe-2
+	"A safe room doesn't have any wumpus or pits!"
+	?some_room <- (Room (xpos ?x) (ypos ?y) (safe TRUE) (hasPit ~FALSE))
+
+	=>
+
+	(modify ?some_room (hasWumpus FALSE) (hasPit FALSE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - safe, no pit, no wumpus" crlf)
+)
+
+(defrule first-visit-room
+	"Mark a room as visited"
+	(declare (salience 10))
+	(Explorer (xpos ?x) (ypos ?y))
+	?cur_room <- (Room (xpos ?x) (ypos ?y) (visited FALSE))
+	
+	=>
+	
+	(modify ?cur_room (visited TRUE))
+        (printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - ~entrance" crlf)
+)
+
+(defrule room-with-pit
+	"Enter a room with a pit"
+	?explorer <- (Explorer (xpos ?x) (ypos ?y) (isAlive TRUE))
+	?cur_room <- (Room (xpos ?x) (ypos ?y))
+	(Pit (xpos ?x) (ypos ?y))
+	
+	=>
+	
+	(modify ?explorer (isAlive FALSE))
+	(modify ?cur_room (hasPit TRUE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - @explorer fell into the void" crlf)
+)
+
+(defrule room-with-wumpus
+	"Enter the room with the wumpus"
+	?explorer <- (Explorer (xpos ?x) (ypos ?y) (isAlive TRUE))
+	?cur_room <- (Room (xpos ?x) (ypos ?y))
+	(Wumpus (xpos ?x) (ypos ?y))
+	
+	=>
+	
+	(modify ?explorer (isAlive FALSE))
+	(modify ?cur_room (hasWumpus TRUE))
+	(printout t "--> Room ["(+ 1 ?x)"," (+ 1 ?y)"] - @explorer fell into the monster's belly" crlf)
+)

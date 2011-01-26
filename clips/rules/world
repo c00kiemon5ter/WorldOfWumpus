@@ -1,0 +1,7 @@
+(deffacts PIT0 (Pit (xpos 3) (ypos 2)))
+(deffacts PIT1 (Pit (xpos 4) (ypos 5)))
+(deffacts PIT2 (Pit (xpos 1) (ypos 3)))
+(deffacts WUMPUS3 (Wumpus (xpos 3) (ypos 3)))
+(deffacts WUMPUS4 (Wumpus (xpos 1) (ypos 6)))
+(deffacts GOLD5 (Gold (xpos 5) (ypos 3)))
+(deffacts EXPLORER6 (Explorer (xpos 6) (ypos 1) (dir 3)))
