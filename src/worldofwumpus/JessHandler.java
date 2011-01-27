@@ -39,7 +39,7 @@ public class JessHandler {
 			engine.reset();
 			engine.run();
 		} catch (JessException je) {
-			throw new IllegalStateException("==> ERROR: Fatal Jess Illegal State");
+			throw new IllegalStateException("==> ERROR: Fatal Jess Illegal State" + je);
 		}
 	}
 

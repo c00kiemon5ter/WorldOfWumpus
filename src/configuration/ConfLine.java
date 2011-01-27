@@ -35,23 +35,12 @@ public class ConfLine {
 		return direction;
 	}
 
-	public String getObjClassName() {
-		switch (type) {
-			case EXPLORER:
-				return "Explorer";
-			case GOLD:
-				return "Gold";
-			case PIT:
-				return "Pit";
-			case WUMPUS:
-				return "Wumpus";
-			default:
-				return "UnknownObject";
-		}
-	}
-
 	@Override
 	public String toString() {
-		return String.format("%s %d %d", type.toString(), point.x, point.y);
+		String str = String.format("%s %d %d ", type.toString(), point.x, point.y);
+		if (type == SquareType.EXPLORER) {
+			str += direction.toString();
+		}
+		return str;
 	}
 }

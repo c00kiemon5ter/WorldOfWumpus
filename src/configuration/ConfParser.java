@@ -17,11 +17,10 @@ import java.util.Scanner;
  */
 public class ConfParser {
 
-	private List<ConfLine> confObjs;
-	private ConfLine explorer;
+	private List<ConfLine> conflines;
 
 	public ConfParser() {
-		confObjs = new LinkedList<ConfLine>();
+		conflines = new LinkedList<ConfLine>();
 	}
 
 	public List<ConfLine> parse() {
@@ -36,11 +35,10 @@ public class ConfParser {
 			if (line.trim().isEmpty() || line.startsWith("//")) {
 				continue;
 			}
-
 			String[] words = line.split("\\s+");
-			if (words.length < 3) {
+			if (words.length < 3 || words.length > 4) {
 				throw new IllegalArgumentException("==> ERROR: Invalid configuration line. "
-								   + "Missing arguments: " + line);
+								   + "Wrong argument count: " + line);
 			}
 
 			SquareType type = null;
@@ -50,7 +48,6 @@ public class ConfParser {
 				throw new IllegalArgumentException("==> ERROR: Invalid configuration line. "
 								   + "Unknown object type: " + line);
 			}
-
 			int x, y;
 			try {
 				x = Integer.parseInt(words[1]) - 1;
@@ -65,9 +62,8 @@ public class ConfParser {
 				throw new IllegalArgumentException("==> ERROR: Invalid configuration line. "
 								   + "Cooardinates must be numbers: " + line);
 			}
-
 			Point point = new Point(x, y);
-			ConfLine confObj = new ConfLine(type, point);
+			ConfLine confline = new ConfLine(type, point);
 
 			if (type == SquareType.EXPLORER) {
 				Direction direction;
@@ -75,19 +71,13 @@ public class ConfParser {
 					direction = Direction.valueOf(words[3]);
 				} catch (IllegalArgumentException iae) {
 					throw new IllegalArgumentException("==> ERROR: Invalid configuration line. "
-									   + "Unknown direction type: " + line);
+									   + "Unknown direction: " + line);
 				}
-				confObj.setDirection(direction);
-				this.explorer = confObj;
+				confline.setDirection(direction);
 			}
-
-			confObjs.add(confObj);
+			conflines.add(confline);
 		}
 		scan.close();
-		return confObjs;
-	}
-
-	public ConfLine getExplorer() {
-		return explorer;
+		return conflines;
 	}
 }

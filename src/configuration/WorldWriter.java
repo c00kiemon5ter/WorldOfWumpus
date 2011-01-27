@@ -13,25 +13,22 @@ import java.util.List;
  */
 public class WorldWriter {
 
-	public void write(List<ConfLine> objs) throws IOException {
+	public void write(List<ConfLine> conflines) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfDefs.WORLD)));
-		StringBuilder str = new StringBuilder();
-		for (int cnt = 0; cnt < objs.size(); cnt++) {
-			ConfLine obj = objs.get(cnt);
-			if (obj.getType() == SquareType.EXPLORER) {
-				str.append(String.format("(deffacts %s (%s (xpos %d) (ypos %d) (dir %d)))\n",
-							 obj.getType() + String.valueOf(cnt),
-							 obj.getObjClassName(),
-							 obj.getPoint().x, obj.getPoint().y,
-							 obj.getDirection().id()));
-				continue;
+		StringBuilder worldline = new StringBuilder();
+		for (int cnt = 0; cnt < conflines.size(); cnt++) {
+			ConfLine confline = conflines.get(cnt);
+			StringBuilder type = new StringBuilder(confline.getType().toString().toLowerCase());
+			type.setCharAt(0, Character.toUpperCase(type.charAt(0)));
+			worldline.append(String.format("(deffacts %s%s (%s (xpos %d) (ypos %d) ",
+						       confline.getType().toString(), String.valueOf(cnt),
+						       type, confline.getPoint().x, confline.getPoint().y));
+			if (confline.getType() == SquareType.EXPLORER) {
+				worldline.append(String.format("(dir %d)", confline.getDirection().id()));
 			}
-			str.append(String.format("(deffacts %s (%s (xpos %d) (ypos %d)))\n",
-						 obj.getType() + String.valueOf(cnt),
-						 obj.getObjClassName(),
-						 obj.getPoint().x, obj.getPoint().y));
+			worldline.append("))\n");
 		}
-		writer.write(str.toString());
+		writer.write(worldline.toString());
 		writer.flush();
 		writer.close();
 	}
