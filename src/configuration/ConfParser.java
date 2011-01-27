@@ -10,9 +10,6 @@ import java.io.FileReader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import worldofwumpus.WordOfWumpus;
 
 /**
  *
@@ -32,8 +29,7 @@ public class ConfParser {
 		try {
 			scan = new Scanner(new BufferedReader(new FileReader(new File(ConfDefs.CONF))));
 		} catch (FileNotFoundException fnfe) {
-			Logger.getLogger(String.format("%s::%s", WordOfWumpus.class.getName(),
-						       ConfParser.class.getName())).log(Level.SEVERE, "==> ERROR: missing configuration file", fnfe);
+			throw new IllegalAccessError("==> ERROR: missing configuration file");
 		}
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine();

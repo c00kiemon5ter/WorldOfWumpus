@@ -231,19 +231,23 @@ public class GameUI extends JFrame {
 	}
 
 	private void play() {
-//		System.out.println("==========================================");
-//		System.out.printf("%s\n:: Explorer is at: %s looking: %s\n",
-//				  squares.get(Utils.pointToIndex(explorerPosition)).toStringWithHeader(),
-//				  Utils.toBoardNotation(explorerPosition),
-//				  explorerDirection.toString());
+		if (ConfDefs.DEBUG) {
+			System.err.printf("%s\n%s\n:: Explorer is at: %s looking: %s\n",
+					  ConfDefs.SEPARATOR,
+					  squares.get(Utils.pointToIndex(explorerPosition)).toStringWithHeader(),
+					  Utils.toBoardNotation(explorerPosition),
+					  explorerDirection.toString());
+		}
 		move(evaluate());
 		updateSquares();
 		updateScore();
-//		System.out.printf("%s\n:: Explorer is at: %s looking: %s\n",
-//				  squares.get(Utils.pointToIndex(explorerPosition)).toStringWithHeader(),
-//				  Utils.toBoardNotation(explorerPosition),
-//				  explorerDirection.toString());
-//		System.out.println("==========================================");
+		if (ConfDefs.DEBUG) {
+			System.err.printf("%s\n:: Explorer is at: %s looking: %s\n%s\n",
+					  squares.get(Utils.pointToIndex(explorerPosition)).toStringWithHeader(),
+					  Utils.toBoardNotation(explorerPosition),
+					  explorerDirection.toString(),
+					  ConfDefs.SEPARATOR);
+		}
 		checkState();
 	}
 

@@ -2,6 +2,8 @@ package configuration;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.util.logging.Logger;
+import worldofwumpus.WordOfWumpus;
 
 /**
  * 
@@ -30,4 +32,9 @@ public class ConfDefs {
 	public static final Image VISITED_IMG = Toolkit.getDefaultToolkit().getImage("src/ui/icons/visited.png").getScaledInstance(imagewidth, imageheight, Image.SCALE_SMOOTH);
 	public static final Image UNKNOWN_IMG = Toolkit.getDefaultToolkit().getImage("src/ui/icons/unknown.png").getScaledInstance(imagewidth, imageheight, Image.SCALE_SMOOTH);
 	public static final Image UNSAFE_IMG = Toolkit.getDefaultToolkit().getImage("src/ui/icons/unsafe.png").getScaledInstance(imagewidth, imageheight, Image.SCALE_SMOOTH);
+	/* DEBUG - verbose output */
+	public static final String DEBUG_OPTION = "-debug";
+	public static boolean DEBUG = false;
+	public static final Logger LOGGER = Logger.getLogger(WordOfWumpus.class.getName());
+	public static final String SEPARATOR = "==========================================";
 }

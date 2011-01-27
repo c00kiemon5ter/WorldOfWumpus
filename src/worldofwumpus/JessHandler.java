@@ -7,8 +7,6 @@ import core.SquareType;
 import java.awt.Point;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jess.Fact;
 import jess.JessException;
 import jess.Rete;
@@ -41,7 +39,7 @@ public class JessHandler {
 			engine.reset();
 			engine.run();
 		} catch (JessException je) {
-			Logger.getLogger(WordOfWumpus.class.getName()).log(Level.SEVERE, "==> ERROR: Fatal Jess Illegal State", je);
+			throw new IllegalStateException("==> ERROR: Fatal Jess Illegal State");
 		}
 	}
 
