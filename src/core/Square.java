@@ -36,37 +36,23 @@ public class Square {
 
 	@Override
 	public String toString() {
-		return String.format("[%2s]%8s%8s%8s%8s%8s%8s%8s%8s",
-				     Utils.toBoardNotation(point),
-				     typeset.contains(SquareType.VISITED),
-				     typeset.contains(SquareType.SMELL),
-				     typeset.contains(SquareType.BREEZE),
-				     typeset.contains(SquareType.SHINE),
-				     typeset.contains(SquareType.WUMPUS),
-				     typeset.contains(SquareType.PIT),
-				     typeset.contains(SquareType.GOLD),
-				     typeset.contains(SquareType.SAFE));
+		StringBuilder info = new StringBuilder();
+		info.append(String.format(":: [%2s]", Utils.toBoardNotation(point)));
+		for (SquareType type : SquareType.values()) {
+			info.append(String.format("%12s", typeset.contains(type)));
+		}
+		return info.toString();
 	}
 
 	public String toStringWithHeader() {
-		return String.format(":: Room%9s%9s%9s%9s%9s%9s%9s%9s\n"
-				     + ":: [%2s]%9s%9s%9s%9s%9s%9s%9s%9s",
-				     SquareType.VISITED.toString(),
-				     SquareType.SMELL.toString(),
-				     SquareType.BREEZE.toString(),
-				     SquareType.SHINE.toString(),
-				     SquareType.WUMPUS.toString(),
-				     SquareType.PIT.toString(),
-				     SquareType.GOLD.toString(),
-				     SquareType.SAFE.toString(),
-				     Utils.toBoardNotation(point),
-				     typeset.contains(SquareType.VISITED),
-				     typeset.contains(SquareType.SMELL),
-				     typeset.contains(SquareType.BREEZE),
-				     typeset.contains(SquareType.SHINE),
-				     typeset.contains(SquareType.WUMPUS),
-				     typeset.contains(SquareType.PIT),
-				     typeset.contains(SquareType.GOLD),
-				     typeset.contains(SquareType.SAFE));
+		StringBuilder header = new StringBuilder();
+		StringBuilder info = new StringBuilder();
+		header.append(":: Room");
+		info.append(String.format(":: [%2s]", Utils.toBoardNotation(point)));
+		for (SquareType type : SquareType.values()) {
+			header.append(String.format("%12s", type.toString()));
+			info.append(String.format("%12s", typeset.contains(type)));
+		}
+		return header.append(System.getProperty("line.separator")).append(info).toString();
 	}
 }

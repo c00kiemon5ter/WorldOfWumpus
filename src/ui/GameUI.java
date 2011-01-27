@@ -236,16 +236,15 @@ public class GameUI extends JFrame {
 //				  squares.get(Utils.pointToIndex(explorerPosition)).toStringWithHeader(),
 //				  Utils.toBoardNotation(explorerPosition),
 //				  explorerDirection.toString());
-		Entry<Direction, Square> nextMove = evaluate();
-		move(nextMove);
+		move(evaluate());
 		updateSquares();
 		updateScore();
-		checkState();
 //		System.out.printf("%s\n:: Explorer is at: %s looking: %s\n",
 //				  squares.get(Utils.pointToIndex(explorerPosition)).toStringWithHeader(),
 //				  Utils.toBoardNotation(explorerPosition),
 //				  explorerDirection.toString());
 //		System.out.println("==========================================");
+		checkState();
 	}
 
 	private void updateScore() {
@@ -361,18 +360,15 @@ public class GameUI extends JFrame {
 		Square current = squares.get(Utils.pointToIndex(explorerPosition));
 		boolean endOfGame = false;
 
-		if (current.isOfType(SquareType.PIT)) {
-			endOfGame = true;
+		if ((endOfGame = current.isOfType(SquareType.PIT))) {
 			JOptionPane.showMessageDialog(this, "Fell into the pit",
 						      "Pit!", JOptionPane.PLAIN_MESSAGE);
 		}
-		if (current.isOfType(SquareType.WUMPUS)) {
-			endOfGame = true;
+		if ((endOfGame = current.isOfType(SquareType.WUMPUS))) {
 			JOptionPane.showMessageDialog(this, "Eaten by the wumpus",
 						      "Wumpus!", JOptionPane.PLAIN_MESSAGE);
 		}
-		if (current.isOfType(SquareType.GOLD)) {
-			endOfGame = true;
+		if ((endOfGame = current.isOfType(SquareType.GOLD))) {
 			JOptionPane.showMessageDialog(this, "Gold Found!",
 						      "Gold!", JOptionPane.PLAIN_MESSAGE);
 		}
