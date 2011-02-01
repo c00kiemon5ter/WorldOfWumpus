@@ -240,7 +240,7 @@ public class GameUI extends JFrame {
 		}
 		move(evaluate());
 		updateSquares();
-		updateScore();
+		checkState();
 		if (ConfDefs.DEBUG) {
 			System.err.printf("%s\n:: Explorer is at: %s looking: %s\n%s\n",
 					  squares.get(Utils.pointToIndex(explorerPosition)).toStringWithHeader(),
@@ -248,14 +248,9 @@ public class GameUI extends JFrame {
 					  explorerDirection.toString(),
 					  ConfDefs.SEPARATOR);
 		}
-		checkState();
 	}
 
 	private void updateScore() {
-		EnumSet<SquareType> typeset = squares.get(Utils.pointToIndex(explorerPosition)).getTypes();
-		for (SquareType type : typeset) {
-			score += type.score();
-		}
 		scoreStat.setText("Score: " + score);
 	}
 
@@ -365,12 +360,18 @@ public class GameUI extends JFrame {
 		boolean endOfGame = false;
 
 		if ((endOfGame = current.isOfType(SquareType.PIT))) {
+			this.score += SquareType.PIT.score();
+			updateScore();
 			JOptionPane.showMessageDialog(this, "Fell into the pit",
 						      "Pit!", JOptionPane.PLAIN_MESSAGE);
 		} else if ((endOfGame = current.isOfType(SquareType.WUMPUS))) {
+			this.score += SquareType.WUMPUS.score();
+			updateScore();
 			JOptionPane.showMessageDialog(this, "Eaten by the wumpus",
 						      "Wumpus!", JOptionPane.PLAIN_MESSAGE);
 		} else if ((endOfGame = current.isOfType(SquareType.GOLD))) {
+			this.score += SquareType.GOLD.score();
+			updateScore();
 			JOptionPane.showMessageDialog(this, "Gold Found!",
 						      "Gold!", JOptionPane.PLAIN_MESSAGE);
 		}
