@@ -36,5 +36,6 @@ public class ConfDefs {
 	public static final String DEBUG_OPTION = "-debug";
 	public static boolean DEBUG = false;
 	public static final Logger LOGGER = Logger.getLogger(WordOfWumpus.class.getName());
+	public static final String NEWLINE = System.getProperty("line.separator");
 	public static final String SEPARATOR = "==========================================";
 }
