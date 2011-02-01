@@ -32,21 +32,21 @@ public enum SquareType {
 		this.priority = priority;
 	}
 
-	public int getScore() {
+	public int score() {
 		return score;
 	}
 
-	public Image getImage() {
+	public Image image() {
 		return image;
 	}
 
-	public int getPriority() {
+	public int priority() {
 		return priority;
 	}
 
-	public static int getPriority(Image image) {
+	public static int priorityFor(Image image) {
 		for (SquareType squareType : values()) {
-			if (squareType.getImage() == image) {
+			if (squareType.image() == image) {
 				return squareType.priority;
 			}
 		}

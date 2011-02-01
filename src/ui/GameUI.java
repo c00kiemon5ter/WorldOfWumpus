@@ -254,7 +254,7 @@ public class GameUI extends JFrame {
 	private void updateScore() {
 		EnumSet<SquareType> typeset = squares.get(Utils.pointToIndex(explorerPosition)).getTypes();
 		for (SquareType type : typeset) {
-			score += type.getScore();
+			score += type.score();
 		}
 		scoreStat.setText("Score: " + score);
 	}
