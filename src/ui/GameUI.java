@@ -367,12 +367,10 @@ public class GameUI extends JFrame {
 		if ((endOfGame = current.isOfType(SquareType.PIT))) {
 			JOptionPane.showMessageDialog(this, "Fell into the pit",
 						      "Pit!", JOptionPane.PLAIN_MESSAGE);
-		}
-		if ((endOfGame = current.isOfType(SquareType.WUMPUS))) {
+		} else if ((endOfGame = current.isOfType(SquareType.WUMPUS))) {
 			JOptionPane.showMessageDialog(this, "Eaten by the wumpus",
 						      "Wumpus!", JOptionPane.PLAIN_MESSAGE);
-		}
-		if ((endOfGame = current.isOfType(SquareType.GOLD))) {
+		} else if ((endOfGame = current.isOfType(SquareType.GOLD))) {
 			JOptionPane.showMessageDialog(this, "Gold Found!",
 						      "Gold!", JOptionPane.PLAIN_MESSAGE);
 		}
