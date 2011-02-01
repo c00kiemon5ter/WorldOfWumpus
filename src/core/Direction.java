@@ -7,18 +7,21 @@ import java.awt.Point;
  * @author c00kiemon5ter
  */
 public enum Direction {
-	/* ↑ */ UP(-1, 0, 0),
-	/* → */ RIGHT(0, +1, 1),
-	/* ↓ */ DOWN(+1, 0, 2),
-	/* ← */ LEFT(0, -1, 3),;
+	/* ↑ */ UP	(-1,  0, 0, '↑'),
+	/* → */ RIGHT	( 0, +1, 1, '→'),
+	/* ↓ */ DOWN	(+1,  0, 2, '↓'),
+	/* ← */ LEFT	( 0, -1, 3, '←'),;
+
 	private int rowstep;
 	private int colstep;
 	private int id;
+	private char symbol;
 
-	private Direction(int rowstep, int colstep, int id) {
+	private Direction(int rowstep, int colstep, int id, char symbol) {
 		this.rowstep = rowstep;
 		this.colstep = colstep;
 		this.id = id;
+		this.symbol = symbol;
 	}
 
 	public Point next(Point point) {
@@ -27,6 +30,10 @@ public enum Direction {
 
 	public int id() {
 		return id;
+	}
+
+	public char symbol() {
+		return symbol;
 	}
 
 	public static Direction valueOf(int id) {
