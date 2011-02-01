@@ -23,7 +23,7 @@ public enum SquareType {
 	MAYBEPIT	('M',	ConfDefs.UNSAFE_IMG	),
 	VISITED		('V',	ConfDefs.VISITED_IMG	),
 	EMPTY		('E',	ConfDefs.EMPTY_IMG	),
-	SAFE		('F',	ConfDefs.EMPTY_IMG	),;
+	SAFE		('O',	ConfDefs.EMPTY_IMG	),;
 
 	/* reverse look up table mapping images to their priority */
 	private static Map<Image, Integer> priorities;

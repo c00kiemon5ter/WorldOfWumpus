@@ -248,6 +248,23 @@ public class GameUI extends JFrame {
 					  explorerDirection.toString(),
 					  ConfDefs.SEPARATOR);
 		}
+		printAsciiBoard();
+	}
+
+	private void printAsciiBoard() {
+		StringBuilder asciiboard = new StringBuilder();
+		int explorerIndx = Utils.pointToIndex(explorerPosition);
+		for (int indx = 0; indx < squares.size(); indx++) {
+			StringBuilder sqr = new StringBuilder(squares.get(indx).toStringAscii());
+			if (explorerIndx == indx) {
+				sqr.insert(0, explorerDirection.symbol());
+			}
+			asciiboard.append(String.format("%9s", sqr.toString()));
+			if ((indx + 1) % ConfDefs.BOARD_LENGTH == 0) {
+				asciiboard.append(ConfDefs.NEWLINE);
+			}
+		}
+		System.out.println(asciiboard.toString());
 	}
 
 	private void updateScore() {
@@ -272,7 +289,7 @@ public class GameUI extends JFrame {
 	}
 
 	private Entry<Direction, Square> evaluate() {
-		Set<Entry<Direction, Square>> surroundings = Utils.getExplorerEnvironment(squares, explorerPosition).entrySet();
+		Set<Entry<Direction, Square>> surroundings = Utils.getCrossEnvironment(squares, explorerPosition).entrySet();
 		List<Entry<Direction, Square>> exploredSafe = new ArrayList<Entry<Direction, Square>>(surroundings.size());
 		List<Entry<Direction, Square>> unExploredSafe = new ArrayList<Entry<Direction, Square>>(surroundings.size());
 		List<Entry<Direction, Square>> unExploredMaybeSafe = new ArrayList<Entry<Direction, Square>>(surroundings.size());
