@@ -40,16 +40,15 @@ public class Utils {
 		return new Point(coordinate.charAt(0) - 1, coordinate.charAt(1) - 65);
 	}
 
-	public static Map<Direction, Square> getExplorerEnvironment(final List<Square> squares, final Point position) {
+	public static Map<Direction, Square> getCrossEnvironment(final List<Square> squares, final Point position) {
 		Map<Direction, Square> surroundingSquares = new EnumMap<Direction, Square>(Direction.class);
 		for (Direction direction : Direction.values()) {
-			if (direction.next(position).x >= 0
-			    && direction.next(position).x < ConfDefs.BOARD_LENGTH
-			    && direction.next(position).y >= 0
-			    && direction.next(position).y < ConfDefs.BOARD_WIDTH) {
-				surroundingSquares.put(direction, squares.get(
-					Utils.pointToIndex(
-					direction.next(position))));
+			Point next = direction.next(position);
+			if (next.x >= 0
+			    && next.x < ConfDefs.BOARD_LENGTH
+			    && next.y >= 0
+			    && next.y < ConfDefs.BOARD_WIDTH) {
+				surroundingSquares.put(direction, squares.get(Utils.pointToIndex(next)));
 			}
 		}
 		return surroundingSquares;
